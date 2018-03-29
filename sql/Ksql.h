@@ -19,12 +19,13 @@
 
 namespace drk {
     using std::string;
+    using std::vector;
 
     using Con = std::shared_ptr<sql::Connection>;
     using PrepStmtPtr = std::shared_ptr<sql::PreparedStatement>;
     using StmtPtr = std::shared_ptr<sql::Statement>;
     using RsltSet = sql::ResultSet;
-    using Cols = std::vector<std::pair<string,string>>;
+    using Cols = vector<std::pair<string, string>>;
 
     class KSql {
 
@@ -36,7 +37,7 @@ namespace drk {
         string pass;
         string db;
     public:
-        KSql(const string& h = "localhost", const string& u = "kwoodle",
+        explicit KSql(const string& h = "localhost", const string& u = "kwoodle",
                 const string& p = "Rancity1!", const string& d = "");
 
         // execute a statement that returns no results
@@ -45,7 +46,7 @@ namespace drk {
         // execute a query
         RsltSet* ExcuteQuery(const string& s);
 
-        void set_table(const string& s);
+        void set_schema(const string& s);
         Cols get_cols(const string& table_schema, const string& table_name);
         void set_autocommit (bool b) {
             con->setAutoCommit(b);
@@ -56,6 +57,8 @@ namespace drk {
         void commit() {
             con->commit();
         }
+
+        string DisplayTable(const string& schema, const string& table, int limit = 10);
     };
 
 const string xml_head {R"%%(<?xml version="1.0" encoding="UTF-8"?>)%%"};

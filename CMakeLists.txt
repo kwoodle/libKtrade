@@ -14,8 +14,8 @@ set(COMPILE_OPTIONS -Wno-deprecated-declarations -fpermissive)
 add_compile_options(${COMPILE_OPTIONS})
 
 set(LIB_SOURCE_FILES curl/ktcurl.cpp curl/ktcurl.h curl/HtmlDoc.cpp curl/HtmlDoc.h
-         curl/CodeMap.h curl/TestURLs.h sql/Ksql.cpp sql/Ksql.h)
-add_library(Ktrd SHARED ${LIB_SOURCE_FILES} curl/parse.cpp curl/parse.h)
+        curl/CodeMap.h curl/TestURLs.h sql/Ksql.cpp sql/Ksql.h Util.cpp Util.h)
+add_library(Ktrd SHARED ${LIB_SOURCE_FILES} curl/parse.cpp curl/parse.h Util.cpp Util.h)
 
 # curl
 find_package(CURL)
@@ -58,7 +58,7 @@ add_executable(Test main.cpp)
 #include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
 target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
 
-add_executable(TestSQL TestSQL.cpp)
+add_executable(TestSQL TestSQL.cpp TestSQL.h)
 target_link_libraries(TestSQL Ktrd)
 
 set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h sql/Ksql.h)
