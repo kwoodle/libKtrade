@@ -185,7 +185,7 @@ ResVec Multi::do_perform(URLVec& urls)
     auto t = steady_clock::now();
     do {
         int transfers = transfers_running;
-        curl_multi_wait(curlm, NULL, 0, 1000, NULL);  // 1000 ms max wait
+        curl_multi_wait(curlm, nullptr, 0, 1000, nullptr);  // 1000 ms max wait
         curl_multi_perform(curlm, &transfers_running);
         if (transfers>transfers_running) {
             CURLMsg* m;
@@ -195,7 +195,7 @@ ResVec Multi::do_perform(URLVec& urls)
                 if (m && (m->msg==CURLMSG_DONE)) {
                     CURLcode res = m->data.result;
                     CURL* e = m->easy_handle;
-                    char* urlc = NULL;
+                    char* urlc = nullptr;
                     curl_easy_getinfo(e, CURLINFO_EFFECTIVE_URL, &urlc);
                     URL url{urlc};
                     if (res!=CURLE_OK) {
@@ -317,8 +317,8 @@ Resp Multi::do_one(URL url)
     FILE* flptr = fopen(flnm.c_str(), "w");
     if (!flptr || !c) throw std::runtime_error{"Multi::do_one Failed\n"};
 
-    curl_easy_setopt(e->first, CURLOPT_WRITEDATA, flptr);
-    curl_easy_setopt(e->first, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(c, CURLOPT_WRITEDATA, flptr);
+    curl_easy_setopt(c, CURLOPT_URL, url.c_str());
     CURLcode cd{curl_easy_perform(c)};
     if(cd != CURLE_OK) {
         string err{"Multi::do_one failed for url " + url + codemap.at(cd)};

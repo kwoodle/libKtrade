@@ -1,0 +1,49 @@
+ Gnuplot now provides a set of string variables ARG0, ARG1, ..., ARG9 and an
+ integer variable ARGC. When a `call` command is executed ARG0 is set to the
+ name of the input file, ARGC is set to the number of parameters present, and
+ ARG1 to ARG9 are loaded from the parameters that follow it on the command line.
+ Any existing contents of the ARG variables are saved and restored across a
+ `call` command.
+
+ Because the parameters are stored in ordinary string variables, they may be
+ dereferenced by macro expansion (analogous to the old-style deprecated syntax).
+ However in many cases it is more natural to use them as you would any other
+ variable.
+
+Subtopic of call: example
+
+      Call site
+          MYFILE = "script1.gp"
+          FUNC = "sin(x)"
+          call MYFILE FUNC 1.23 "This is a plot title"
+      Upon entry to the called script
+          ARG0 holds "script1.gp"
+          ARG1 holds the string "sin(x)"
+          ARG2 holds the string "1.23"
+          ARG3 holds the string "This is a plot title"
+          ARGC is 3
+      The script itself can now execute
+          plot @ARG1 with lines title ARG3
+          print ARG2 * 4.56, @ARG2 * 4.56
+          print "This plot produced by script ", ARG0
+
+ Notice that ARG1 must be dereferenced as a macro, but ARG2 may be dereferenced
+ either as a macro (yielding a numerical constant) or a variable (yielding that
+ same numerical value after auto-promotion of the string "1.23" to a real).
+
+ The same result could be obtained directly from a shell script by invoking
+ gnuplot with the `-c` command line option:
+
+      gnuplot -persist -c "script1.gp" "sin(x)" 1.23 "This is a plot title"
+
+
+ The `frequency` option makes the data monotonic in x; points with the same
+ x-value are replaced by a single point having the summed y-values.
+ To plot a histogram of the number of data values in equal size bins,
+ set the y-value to 1.0 so that the sum is a count of occurances in that bin:
+ Example:
+      binwidth = <something>  # set width of x values in each bin
+      bin(val) = binwidth * floor(val/binwidth)
+      plot "datafile" using (bin(column(1))):(1.0) smooth frequency
+ See also
+ smooth.dem

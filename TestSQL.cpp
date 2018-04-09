@@ -33,10 +33,55 @@ int main(int argc, char** argv)
      */
     cout << "Testing DispalyTable done\n";
     cout << "Testing Pipe to mysql from libKtrade\n";
-    string mysq{"/usr/bin/mysql -H -e 'select * from profile limit 10' cookbook > test.html"};
+    string mysq{"/usr/bin/mysql -e 'select year(dob) as `DOB`, year(lastvoteddate) as `lastvoted` from ward4active "
+                "where lastvoteddate is not NULL' test > ../gnuplot/votedata"};
     string myout{get_from_cmd(mysq)};
     cout << myout << "\n";
     cout << "Testing Pipe to mysql from libKtrade done\n";
+    string gplot = R"%%(/usr/bin/gnuplot --persist)%%";
+    cout << "\n" << gplot << "\n";
+    FILE* GNU;
+    GNU = popen(gplot.c_str(), "w");
+    if (GNU==nullptr) {
+        std::cerr << "Error opening pipe to GNU plot!\n";
+        exit(1);
+    }
+    string cmd = R"%%(
+col = "DOB"
+col2 = "lastvoted"
+stats '../gnuplot/votedata' using col name "D" nooutput
+stats '../gnuplot/votedata' using col2 name "l" nooutput
+min = D_min
+max = D_max
+minl = l_min
+maxl = l_max
+)%%";
+    fprintf(GNU, cmd.c_str());
+    string cmd2 = R"%%(set boxwidth 1
+set style fill pattern 4
+set ylabel 'counts'
+set multiplot layout 2,1 title 'ward4active'
+#unset key
+set key left
+set yrange [0:*]
+set xrange [min-1:max+1]
+plot '../gnuplot/votedata' using (column(col)):(1) smooth frequency with boxes lc 1 title col
+set xrange [minl-1:maxl+1]
+set style fill pattern 5
+plot '../gnuplot/votedata' using (column(col2)):(1) smooth frequency with boxes lc 2 title col2
+unset multiplot
+pause -1 "Hit return to continue"
+)%%";
+    fprintf(GNU, cmd2.c_str());
+    pclose(GNU);
+    string script{cmd+cmd2};
+    string scrname{"../gnuplot/script.gnu"};
+    ofstream scrs(scrname);
+    if (!scrs) {
+        std::cerr << "Failed to open " << script << "\n";
+        return 1;
+    }
+    scrs << script;
     return 0;
 }
 

@@ -5,16 +5,19 @@
 #include <Python.h>
 #include <map>
 #include <iostream>
+#include <sstream>
 #include "curl/ktcurl.h"
 #include "curl/HtmlDoc.h"
 #include "curl/CodeMap.h"
 #include "curl/parse.h"
 #include "curl/TestURLs.h"
+#include "Util.h"
 #include <boost/filesystem.hpp>
 
 using std::string;
 using std::cout;
 using std::get;
+using std::stringstream;
 namespace boofs = boost::filesystem;        // to get name of executable
 using namespace drk;
 
@@ -58,6 +61,22 @@ int main(int argc, char* argv[])
             }
         }
     }
-
+    // Test histogram using input data file from gaussian gnuplot_test.data
+    string tstfile{"../gnuplot/gnuplot_test.data"};
+    std::ifstream ifile{tstfile};
+    if (!ifile) {
+        cout << "Failed to open "+tstfile+"\n";
+        return 1;
+    }
+    vector<double> test_hist;
+    string line;
+    while (getline(ifile, line)) {
+        float wd;
+        stringstream s(line);
+        while (s >> wd)
+            test_hist.push_back(wd);
+    }
+//    test_hist = {1.,2.,3.,4.,5.5,2.2,3.};
+    pair<vector<int>, string> test_out = drk::histogram("test", test_hist);
     return 0;
 }
