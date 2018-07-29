@@ -10,20 +10,18 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 using std::string;
 using std::vector;
 using std::pair;
+using std::ifstream;
+using std::stringstream;
+
 namespace drk {
     extern string get_from_cmd(string cmd);
 
-    template<typename T>
-    pair<vector<int>, string> histogram(const string& name, const vector<T>& vec, int nbins = 100);
-
-    class GPlot {
-
-    };
+    string slurp(ifstream& in);
 }
-
-#include "Util.cpp"
 #endif //LIBKTRADE_UTIL_H

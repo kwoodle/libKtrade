@@ -61,11 +61,13 @@ namespace drk {
         string DisplayTable(const string& schema, const string& table, int limit = 10);
     };
 
-const string xml_head {R"%%(<?xml version="1.0" encoding="UTF-8"?>)%%"};
-const string cols_str {R"%%(select ordinal_position, column_name, column_type from information_schema.columns
-    where table_schema = '<TABLE_SCHEMA>'
-    and table_name = '<TABLE_NAME>')%%"};
-const string tbl_sch {R"%%(<TABLE_SCHEMA>)%%"};
-const string tbl_nam {R"%%(<TABLE_NAME>)%%"};
+    extern const string xml_head;
+    extern const string cols_str;
+    extern const string tbl_sch;
+    extern const string tbl_nam;
+    extern const string mysql_tmplt;
+
+    extern string mysql_replace(string cmd, string out, string db = "");
+
 }
 #endif //LIBKTRADE_KSQL_H

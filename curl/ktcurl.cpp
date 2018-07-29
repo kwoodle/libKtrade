@@ -244,14 +244,15 @@ Multi::~Multi()
     curl_global_cleanup();
 }
 
-Multi::Multi(const string& nm)
+Multi::Multi(const string& nm, bool verb)
         :curlm{curl_multi_init()}, name{nm}
 {
     for (int i = 0; i<max_curls; ++i) {
         CURL* curl = curl_easy_init();
         //
-        // user agent
-        curl_easy_setopt(curl, CURLOPT_USERAGENT, "DrK");
+//        static string user_agent{R"%%(Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.13) Gecko/2009080200 SUSE/3.0.13-0.1.2 Firefox/3.0.13)%%"};
+        static string user_agent{"DrK"};
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, user_agent.c_str());
         //
         // follow redirects
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
@@ -261,7 +262,9 @@ Multi::Multi(const string& nm)
         //
         // write response to file
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, nullptr);
-
+        if (verb) {
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        }
         curl_multi_add_handle(curlm, curl);
 
         //

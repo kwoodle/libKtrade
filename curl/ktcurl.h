@@ -83,7 +83,7 @@ public:
 
 class Multi {
 public:
-    Multi(const string& nm="multi");
+    explicit Multi(const string& nm, bool verb = false);
     ~Multi();
     void load(URLVec& v);
     CURLM* curl() { return curlm; }

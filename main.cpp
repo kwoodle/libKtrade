@@ -2,10 +2,8 @@
 // Created by kwoodle on 1/22/18.
 //
 
-#include <Python.h>
 #include <map>
 #include <iostream>
-#include <sstream>
 #include "curl/ktcurl.h"
 #include "curl/HtmlDoc.h"
 #include "curl/CodeMap.h"
@@ -23,14 +21,15 @@ using namespace drk;
 
 int main(int argc, char* argv[])
 {
-    URLVec urls{"http://example.com", "http://examplex@.com", "https://www.iana.org"};
+    URLVec urls{"http://example.com", "http://examplex@.com", "https://www.iana.org"/*,
+            "https://www.nasdaq.com/quotes/time-and-sales.aspx"*/};
     // Get name of this application
     // to be used to create somewhat unique filename
     // in which to store data
     //
     boofs::path app_path{argv[0]};
     string app_name = app_path.filename().string();
-    Multi curlm(app_name);
+    Multi curlm(app_name/*, true*/);
 
 
     // Initialize multi_curl with vector of urls to connect to
@@ -47,36 +46,26 @@ int main(int argc, char* argv[])
             auto d = e.second;
             HtmlDoc doc{d};
 
-            Xpath xpath{"//p"}; // xpath for HTML paragraph <p> anywhere in document
+            Xpath xpath{"//title"}; // xpath for HTML <title>
             doc.GetNodeset(xpath);
-            string para;
+            string titl;
             if (doc.result()) {
                 // get content string for first paragraph
-                para = doc.GetNodeString(doc.nodeset()->nodeTab[0]->xmlChildrenNode, 1);
-                cout << "From first HTML paragraph in " << u << "\n";
-                cout << para << "\n\n";
+                titl = doc.GetNodeString(doc.nodeset()->nodeTab[0]->xmlChildrenNode, 1);
+                cout << "From HTML title in " << u << "\n";
+                cout << titl << "\n\n";
             }
             else {
                 cout << "No match for xpath " << xpath << " in doc from " << u << "\n\n";
             }
         }
     }
-    // Test histogram using input data file from gaussian gnuplot_test.data
-    string tstfile{"../gnuplot/gnuplot_test.data"};
-    std::ifstream ifile{tstfile};
-    if (!ifile) {
-        cout << "Failed to open "+tstfile+"\n";
-        return 1;
+    string string1{"../gnuplot/gnuplot_test.data"};
+    ifstream ifstream1(string1);
+    if (!ifstream1) {
+        cout << "Failed to open " << string1 << "\n";
     }
-    vector<double> test_hist;
-    string line;
-    while (getline(ifile, line)) {
-        float wd;
-        stringstream s(line);
-        while (s >> wd)
-            test_hist.push_back(wd);
-    }
-//    test_hist = {1.,2.,3.,4.,5.5,2.2,3.};
-    pair<vector<int>, string> test_out = drk::histogram("test", test_hist);
+    string test_slurp{drk::slurp(ifstream1)};
+    cout << "Slurped string from " << string1 << " has length " << test_slurp.length() << "\n";
     return 0;
 }

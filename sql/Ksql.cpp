@@ -133,3 +133,22 @@ string KSql::DisplayTable(const string& schema, const string& table, int limit)
     return outstr;
 }
 
+string drk::mysql_replace(string cmd, string out, string db)
+{
+    string s1{mysql_tmplt};
+    std::regex pat1{"<MYSQL_CMD>"};
+    std::regex pat2{"<MYSQL_DB>"};
+    std::regex pat3{"<MYSQL_OUT>"};
+    string s2{std::regex_replace(s1, pat1, cmd)};
+    string s3{std::regex_replace(s2, pat2, db)};
+    string s4{std::regex_replace(s3, pat3, out)};
+    return s4;
+}
+
+const string xml_head{R"%%(<?xml version="1.0" encoding="UTF-8"?>)%%"};
+const string drk::cols_str{R"%%(select ordinal_position, column_name, column_type from information_schema.columns
+    where table_schema = '<TABLE_SCHEMA>'
+    and table_name = '<TABLE_NAME>')%%"};
+const string drk::tbl_sch{R"%%(<TABLE_SCHEMA>)%%"};
+const string drk::tbl_nam{R"%%(<TABLE_NAME>)%%"};
+const string drk::mysql_tmplt{R"%%(/usr/bin/mysql -e '<MYSQL_CMD>' <MYSQL_DB> <MYSQL_OUT>)%%"};

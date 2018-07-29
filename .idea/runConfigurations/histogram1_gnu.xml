@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="histogram1.gnu" type="BashConfigurationType" factoryName="Bash">
+    <module name="libKtrade" />
+    <option name="INTERPRETER_OPTIONS" value="--persist" />
+    <option name="INTERPRETER_PATH" value="/usr/bin/gnuplot" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/gnuplot" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gnuplot/histogram1.gnu" />
+    <option name="PARAMETERS" value="" />
+    <method />
+  </configuration>
+</component>

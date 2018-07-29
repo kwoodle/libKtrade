@@ -5,8 +5,10 @@
 #include "sql/Ksql.h"
 #include "TestSQL.h"
 #include "Util.h"
+#include <ktrade/nlohmann/json.hpp>
 
 using namespace drk;
+using json = nlohmann::json;
 
 //using namespace ::mysqlx;
 using std::cout;
@@ -32,12 +34,18 @@ int main(int argc, char** argv)
     cout<<prof;
      */
     cout << "Testing DispalyTable done\n";
-    cout << "Testing Pipe to mysql from libKtrade\n";
+    cout << "Testing Pipes to mysql and gnuplot from libKtrade\n";
+    test_pipes();
+    return 0;
+}
+
+void test_pipes()
+{
     string mysq{"/usr/bin/mysql -e 'select year(dob) as `DOB`, year(lastvoteddate) as `lastvoted` from ward4active "
                 "where lastvoteddate is not NULL' test > ../gnuplot/votedata"};
     string myout{get_from_cmd(mysq)};
     cout << myout << "\n";
-    cout << "Testing Pipe to mysql from libKtrade done\n";
+//    cout << "Testing Pipe to mysql from libKtrade done\n";
     string gplot = R"%%(/usr/bin/gnuplot --persist)%%";
     cout << "\n" << gplot << "\n";
     FILE* GNU;
@@ -76,14 +84,13 @@ pause -1 "Hit return to continue"
     pclose(GNU);
     string script{cmd+cmd2};
     string scrname{"../gnuplot/script.gnu"};
-    ofstream scrs(scrname);
+    std::ofstream scrs(scrname);
     if (!scrs) {
         std::cerr << "Failed to open " << script << "\n";
-        return 1;
+        return;
     }
     scrs << script;
-    return 0;
-}
+};
 
 void test_cols(KSql& kSql, const string& schema, const string& table)
 {
