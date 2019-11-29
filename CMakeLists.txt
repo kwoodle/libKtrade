@@ -3,8 +3,8 @@ project(libKtrade)
 
 set(CMAKE_CXX_STANDARD 11)
 # For FindMySQL
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/cmake/Modules")
-
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ";/usr/share/cmake/Modules")
+message(STATUS "CMAKE_MODULE_PATH = " ${CMAKE_MODULE_PATH})
 if (NOT CMAKE_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX _d)
 endif ()
@@ -15,7 +15,8 @@ add_compile_options(${COMPILE_OPTIONS})
 
 set(LIB_SOURCE_FILES curl/ktcurl.cpp curl/ktcurl.h curl/HtmlDoc.cpp curl/HtmlDoc.h
         curl/CodeMap.h curl/TestURLs.h sql/Ksql.cpp sql/Ksql.h Util.cpp Util.h)
-add_library(Ktrd SHARED ${LIB_SOURCE_FILES} curl/parse.cpp curl/parse.h Util.cpp Util.h)
+add_library(Ktrd SHARED ${LIB_SOURCE_FILES} curl/parse.cpp curl/parse.h Util.cpp Util.h
+        workday_script.php)
 
 # curl
 find_package(CURL)
@@ -37,7 +38,7 @@ if (LIBXML2_FOUND)
     message(STATUS "LibXml2_include_dir " ${LIBXML2_INCLUDE_DIR})
 endif (LIBXML2_FOUND)
 
-set(BOOST_INCLUDEDIR "/usr/include")
+#set(BOOST_INCLUDEDIR "/usr/include")
 find_package(Boost 1.64 COMPONENTS date_time system filesystem)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(Ktrd ${Boost_LIBRARIES})
@@ -48,12 +49,6 @@ find_package(MySQL)
 include_directories(${MYSQL_INCLUDE_DIR})
 target_link_libraries(Ktrd ${MYSQL_LIBRARIES} ${MYSQL_EXTRA_LIBRARIES})
 
-#set(Python_ADDITIONAL_VERSIONS 3.6)
-find_package(PythonLibs)
-#set(PYTHON_INCLUDE_DIRS /usr/include/python3.6m)
-#set(PYTHON_LIBRARIES /usr/lib64/libpython3.6m)
-include_directories(${PYTHON_INCLUDE_DIRS})
-
 add_executable(Test main.cpp)
 #include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
 target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
@@ -61,7 +56,7 @@ target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
 add_executable(TestSQL TestSQL.cpp TestSQL.h)
 target_link_libraries(TestSQL Ktrd)
 
-set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h sql/Ksql.h Util.h Util.cpp)
+set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h sql/Ksql.h Util.h Util.cpp workday_script.php)
 install(TARGETS Ktrd DESTINATION lib/ktrade CONFIGURATIONS Debug Release EXPORT ktrade-targets)
 install(FILES ${SOURCE_FILES} DESTINATION include/ktrade)
 install(EXPORT ktrade-targets DESTINATION lib/ktrade/cmake)
