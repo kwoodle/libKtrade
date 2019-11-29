@@ -52,7 +52,7 @@ namespace drk {
             con->setAutoCommit(b);
         }
         bool get_autocommit() const {
-            con->getAutoCommit();
+            return con->getAutoCommit();
         }
         void commit() {
             con->commit();

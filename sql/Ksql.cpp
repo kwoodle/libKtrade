@@ -101,21 +101,25 @@ string KSql::DisplayTable(const string& schema, const string& table, int limit)
         // keep track of individual fields so we can find maximum field length
         // for output formatting
         vector<string> fields;
-        for (u_int i{0}; i<is; ++i) {
+        for (u_int i{0}; i < is; ++i) {
             // getString(column_name)
             string c{res->getString(cols[i].first)};
             fields.push_back(c);
-            mls[i] = c.length()>mls[i] ? c.length() : mls[i];
-            mls[i] = hdrs[i].length()>mls[i] ? hdrs[i].length() : mls[i];
+            mls[i] = c.length() > mls[i] ? c.length() : mls[i];
+            mls[i] = hdrs[i].length() > mls[i] ? hdrs[i].length() : mls[i];
         }
         rows.push_back(fields);
     }
+    if (rows.size() < 1) {
+        outstr += "\nNo rows returned!\n";
+        return outstr;
+    }
     outstr += "\n";
-    for (auto i = 0; i<is; ++i) {
+    for (auto i = 0; i < is; ++i) {
         auto h = hdrs[i];
 
         // pad fields to align column headers to the right
-        h.insert(h.begin(), mls[i]+4-h.length(), ' ');
+        h.insert(h.begin(), mls[i] + 4 - h.length(), ' ');
         outstr += h;
     }
     outstr += "\n";

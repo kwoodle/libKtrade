@@ -19,10 +19,10 @@ using std::stringstream;
 namespace boofs = boost::filesystem;        // to get name of executable
 using namespace drk;
 
-int main(int argc, char* argv[])
-{
-    URLVec urls{"http://example.com", "http://examplex@.com", "https://www.iana.org"/*,
-            "https://www.nasdaq.com/quotes/time-and-sales.aspx"*/};
+int main(int argc, char *argv[]) {
+    URLVec urls{"http://example.com", "http://examplex@.com", "https://www.iana.org"};
+//    urls.push_back("http://old.nasdaq.com/symbol/AAPL/time-sales?time=1");
+    urls.push_back("http://old.nasdaq.com/symbol/AAPL");
     // Get name of this application
     // to be used to create somewhat unique filename
     // in which to store data
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     // and a name which acts as a base for files to contain received data
     //
     // urls = test_urls;
-    while(!urls.empty()) {
+    while (!urls.empty()) {
         curlm.load(urls);
         ResVec results = curlm.do_perform(urls);
 
@@ -54,18 +54,22 @@ int main(int argc, char* argv[])
                 titl = doc.GetNodeString(doc.nodeset()->nodeTab[0]->xmlChildrenNode, 1);
                 cout << "From HTML title in " << u << "\n";
                 cout << titl << "\n\n";
-            }
-            else {
+            } else {
                 cout << "No match for xpath " << xpath << " in doc from " << u << "\n\n";
             }
         }
     }
-    string string1{"../gnuplot/gnuplot_test.data"};
+    std::string string1{"../gnuplot/gnuplot_test.data"};
     ifstream ifstream1(string1);
     if (!ifstream1) {
         cout << "Failed to open " << string1 << "\n";
     }
     string test_slurp{drk::slurp(ifstream1)};
     cout << "Slurped string from " << string1 << " has length " << test_slurp.length() << "\n";
+
+    bool tst = drk::is_workday();
+    string tst_out = tst ? " is " : " is not ";
+    string t_out = "\nToday" + tst_out + "a workday\n";
+    cout << t_out;
     return 0;
 }

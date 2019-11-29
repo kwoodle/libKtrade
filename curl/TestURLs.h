@@ -59,5 +59,11 @@ const URLVec test_urls{
         "http://www.newslink.org",
         "http://www.un.org",
 };
+
+    const URLVec https_urls{
+            "https://www.nasdaq.com/symbol/aapl/time-sales",
+            "https://start.fedoraproject.org/",
+            "https://en.wikipedia.org"
+    };
 }
 #endif //LIBKTRADE_TESTURLS_H

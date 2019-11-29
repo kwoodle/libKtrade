@@ -44,17 +44,22 @@ using Errbuf = std::array<char, CURL_ERROR_SIZE>;
 class EzCurl {
 public:
     explicit EzCurl(string name);
+
     explicit EzCurl(string name, long to);
 
-    EzCurl(EzCurl& ez) = delete;
+    explicit EzCurl(string name, bool verbose);
 
-    EzCurl& operator=(EzCurl&) = delete;
+    EzCurl(EzCurl &ez) = delete;
+
+    EzCurl &operator=(EzCurl &) = delete;
 
     ~EzCurl();
 
     CURLcode get_code();
-    FILE* setup(URL);
-    void set_url(const URL&);
+
+    FILE *setup(URL);
+
+    void set_url(const URL &);
 
     string GetResponseFile(const URL& url);
 
@@ -67,12 +72,15 @@ private:
     void print_error(CURLcode);
 
     void check_codes();
-    CURL* get_curl()
-    {
+
+    CURL *get_curl() {
         return curl;
     }
-    void init();
+
+    void init(bool verb = false);
+
     void finish();
+
     double response_time{9999.};
     long timeout{0L};
 public:
@@ -81,32 +89,39 @@ public:
 
 };
 
-class Multi {
-public:
-    explicit Multi(const string& nm, bool verb = false);
-    ~Multi();
-    void load(URLVec& v);
-    CURLM* curl() { return curlm; }
-    ResVec do_perform(URLVec& urls);
-    Resp do_one(URL);
-    void multi_perform();
-    const CURLMap& curlmap() const {
-        return curl_map;
-    }
+    class Multi {
+    public:
+        explicit Multi(const string &nm, bool verb = false);
 
-    static const string froot;
-    static const string suff;
+        ~Multi();
 
-private:
-    CURLM* curlm;
-    string name;
-    long timeout{10L}; // max wait time for all easy curls
-    CURLMap curl_map;
-    URLVec ToDo;
-    int max_curls{10};        // max number of easy handles
+        void load(URLVec &v);
 
-    void close_files();
-};
+        CURLM *curl() { return curlm; }
+
+        ResVec do_perform(URLVec &urls);
+
+        Resp do_one(URL);
+
+        void multi_perform();
+
+        const CURLMap &curlmap() const {
+            return curl_map;
+        }
+
+        static const string froot;
+        static const string suff;
+
+    private:
+        CURLM *curlm;
+        string name;
+        long timeout{1L}; // max wait time for all easy curls
+        CURLMap curl_map;
+        URLVec ToDo;
+        int max_curls{10};        // max number of easy handles
+
+        void close_files();
+    };
 }
 
 #endif

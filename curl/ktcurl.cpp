@@ -27,12 +27,16 @@ EzCurl::EzCurl(const string name)
 }
 
 EzCurl::EzCurl(const string name, long to)
-        :flnm(froot+name), timeout{to}
-{
+        : flnm(froot + name), timeout{to} {
     flnm += suff;
     init();
 }
 
+EzCurl::EzCurl(const string name, bool verb)
+        : flnm(froot + name) {
+    flnm += suff;
+    init(verb);
+}
 //EzCurl::EzCurl(EzCurl& ez)
 //        :curl{ez.curl} { }
 
@@ -155,8 +159,7 @@ void EzCurl::finish()
 //    if (flptr) fclose(flptr);
 }
 
-void EzCurl::init()
-{
+void EzCurl::init(bool verb) {
     //
     curl = curl_easy_init();
     if (!curl) throw std::runtime_error{"Failure in curl_easy_init\n"};
@@ -171,6 +174,11 @@ void EzCurl::init()
     //
     // buffer to return error code strings
     codes.push(curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf));
+    codes.push(curl_easy_setopt(curl, CURLOPT_COOKIESESSION, 1L));
+    codes.push(curl_easy_setopt(curl, CURLOPT_COOKIEFILE, ""));  /* start cookie engine */
+    if (verb) {
+        codes.push(curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L));
+    }
     check_codes();
 }
 
@@ -265,6 +273,8 @@ Multi::Multi(const string& nm, bool verb)
         if (verb) {
             curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         }
+        curl_easy_setopt(curl, CURLOPT_COOKIESESSION, 1L);
+        curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");  /* start cookie engine */
         curl_multi_add_handle(curlm, curl);
 
         //

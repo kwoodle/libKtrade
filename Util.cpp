@@ -29,3 +29,9 @@ string drk::slurp(ifstream& in)
 }
 
 
+bool drk::is_workday() {
+//    string cmd = "/usr/bin/php -R " + drk::holiday_script;
+    string cmd = "/usr/bin/php /usr/local/include/ktrade/workday_script.php";
+    string res = drk::get_from_cmd(cmd);
+    return (res == "true" ? true : false);
+}

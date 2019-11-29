@@ -78,7 +78,7 @@ set xrange [minl-1:maxl+1]
 set style fill pattern 5
 plot '../gnuplot/votedata' using (column(col2)):(1) smooth frequency with boxes lc 2 title col2
 unset multiplot
-pause -1 "Hit return to continue"
+#pause -1 "Hit return to continue"
 )%%";
     fprintf(GNU, cmd2.c_str());
     pclose(GNU);
