@@ -3,7 +3,7 @@ project(libKtrade)
 
 set(CMAKE_CXX_STANDARD 11)
 # For FindMySQL
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ";/usr/share/cmake/Modules")
+list(APPEND CMAKE_MODULE_PATH /home/kwoodle/CLionProjects/cmake)
 message(STATUS "CMAKE_MODULE_PATH = " ${CMAKE_MODULE_PATH})
 if (NOT CMAKE_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX _d)
@@ -56,7 +56,7 @@ target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
 add_executable(TestSQL TestSQL.cpp TestSQL.h)
 target_link_libraries(TestSQL Ktrd)
 
-set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h sql/Ksql.h Util.h Util.cpp workday_script.php)
+set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h curl/CodeMap.h sql/Ksql.h Util.h Util.cpp workday_script.php)
 install(TARGETS Ktrd DESTINATION lib/ktrade CONFIGURATIONS Debug Release EXPORT ktrade-targets)
 install(FILES ${SOURCE_FILES} DESTINATION include/ktrade)
 install(EXPORT ktrade-targets DESTINATION lib/ktrade/cmake)

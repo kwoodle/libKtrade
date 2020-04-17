@@ -1,5 +1,4 @@
 #include "ktcurl.h"
-#include "CodeMap.h"
 #include <iostream>
 #include <cstring>
 #include <chrono>
@@ -19,9 +18,16 @@ const string Multi::suff{".html"};
 // Default constructor sets some default options including
 // follow redirects
 // write response body to file
+
+EzCurl::EzCurl() {
+    curl = curl_easy_init();
+    if (!curl) throw std::runtime_error{"Failure in curl_easy_init\n"};
+}
 EzCurl::EzCurl(const string name)
         :flnm(froot+name)
 {
+    curl = curl_easy_init();
+    if (!curl) throw std::runtime_error{"Failure in curl_easy_init\n"};
     flnm += suff;
     init();
 }
@@ -29,12 +35,16 @@ EzCurl::EzCurl(const string name)
 EzCurl::EzCurl(const string name, long to)
         : flnm(froot + name), timeout{to} {
     flnm += suff;
+    curl = curl_easy_init();
+    if (!curl) throw std::runtime_error{"Failure in curl_easy_init\n"};
     init();
 }
 
 EzCurl::EzCurl(const string name, bool verb)
         : flnm(froot + name) {
     flnm += suff;
+    curl = curl_easy_init();
+    if (!curl) throw std::runtime_error{"Failure in curl_easy_init\n"};
     init(verb);
 }
 //EzCurl::EzCurl(EzCurl& ez)
@@ -160,10 +170,6 @@ void EzCurl::finish()
 }
 
 void EzCurl::init(bool verb) {
-    //
-    curl = curl_easy_init();
-    if (!curl) throw std::runtime_error{"Failure in curl_easy_init\n"};
-
     errbuf[0] = 0;
     //
     // follow redirects
@@ -181,6 +187,16 @@ void EzCurl::init(bool verb) {
     }
     check_codes();
 }
+
+URL EzCurl::get_URL() {
+    URL val;
+    curl_easy_getinfo(curl, CURLINFO_EFFECTIVE_URL, &val);
+    return val;
+}
+
+//CURLMap::value_type EzCurl::make_element() {
+//    return std::unordered_map<void *, tuple<URL, FILE *, DocFile>>::value_type(curl, get_URL(),);
+//}
 
 // Iterate through urls from the beginning
 // Return a CURLMap with size >= urls.size() and size < Multi:max
