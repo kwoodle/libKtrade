@@ -12,11 +12,13 @@
 #include <stdexcept>
 #include <stack>
 #include <vector>
+#include <list>
 #include <set>
 #include <map>
 #include <utility>
 #include <array>
 #include <unordered_map>
+#include "CodeMap.h"
 
 using std::string;
 using std::stack;
@@ -43,24 +45,22 @@ using Errbuf = std::array<char, CURL_ERROR_SIZE>;
 //
 class EzCurl {
 public:
+    explicit EzCurl(void);
     explicit EzCurl(string name);
-
     explicit EzCurl(string name, long to);
-
     explicit EzCurl(string name, bool verbose);
-
     EzCurl(EzCurl &ez) = delete;
-
     EzCurl &operator=(EzCurl &) = delete;
-
     ~EzCurl();
-
+    void init(bool verb = false);
+    CURL *get_curl() {
+        return curl;
+    }
+    URL get_URL();
+//    CURLMap::value_type make_element();
     CURLcode get_code();
-
     FILE *setup(URL);
-
     void set_url(const URL &);
-
     string GetResponseFile(const URL& url);
 
 private:
@@ -72,12 +72,6 @@ private:
     void print_error(CURLcode);
 
     void check_codes();
-
-    CURL *get_curl() {
-        return curl;
-    }
-
-    void init(bool verb = false);
 
     void finish();
 
