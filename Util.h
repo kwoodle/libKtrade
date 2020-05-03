@@ -52,7 +52,8 @@ echo $os2;
             if (name.begin()->length() == 0) {
                 use_default_name();
             } else {
-                filename = concat_strings(name);
+                filename = logdir;
+                filename.append(concat_strings(name));
             }
             std::fstream::open(filename.c_str(), std::fstream::out);
             *this << tstamp() << " Starting " << std::endl;
