@@ -55,6 +55,8 @@ target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
 
 add_executable(TestSQL TestSQL.cpp TestSQL.h)
 target_link_libraries(TestSQL Ktrd)
+add_executable(TestLog TestLog.cpp)
+target_link_libraries(TestLog Ktrd)
 
 set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h curl/CodeMap.h sql/Ksql.h Util.h Util.cpp workday_script.php)
 install(TARGETS Ktrd DESTINATION lib/ktrade CONFIGURATIONS Debug Release EXPORT ktrade-targets)
