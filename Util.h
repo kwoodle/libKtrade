@@ -76,12 +76,12 @@ echo $os2;
         string show_host() {
             return host;
         }
-
-    protected:
-        string time_now();
         string tstamp() {
             return concat_strings({app_name, time_now()});
         }
+
+    protected:
+        string time_now();
         string date_time_now(bool date_only = false);
         string concat_strings(initializer_list<string>, string sep = "::");
 
@@ -99,7 +99,7 @@ echo $os2;
 
         void use_default_name() {
             filename = logdir;
-            filename.append(concat_strings({date_time_now(), get_app_name(), get_host()}));
+            filename.append(concat_strings({date_time_now(), get_app_name()}));
         }
         void set_host() {
             host = get_host();

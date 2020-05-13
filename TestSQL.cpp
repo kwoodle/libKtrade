@@ -6,9 +6,11 @@
 #include "TestSQL.h"
 #include "Util.h"
 #include <ktrade/nlohmann/json.hpp>
+#include <boost/program_options.hpp>
 
 using namespace drk;
 using json = nlohmann::json;
+namespace po = boost::program_options;
 
 //using namespace ::mysqlx;
 using std::cout;
@@ -17,7 +19,32 @@ using std::string;
 int main(int argc, char** argv)
 {
     cout << "Testing SQL from libKtrade\n";
-    KSql kSql;
+    // Get parameters from config file
+    string service, user, pass;
+    ifstream cfg("../mysql.ini");
+    if (!cfg.is_open()) {
+        cout << "Failed to open config file\n";
+        return 1;
+    }
+    po::options_description desc("Config");
+    desc.add_options()
+            ("mysql.service", po::value<string>())
+            ("mysql.user", po::value<string>())
+            ("mysql.password", po::value<string>());
+
+    po::variables_map vm;
+
+    // set third parameter to true to allow unregistered options
+    // in config file.
+    store(parse_config_file(cfg, desc, true), vm);
+    notify(vm);
+
+    service = vm["mysql.service"].as<string>();
+    user = vm["mysql.user"].as<string>();
+    pass = vm["mysql.password"].as<string>();
+
+    cfg.close();
+    KSql kSql(service, user, pass);
     auto res = kSql.ExcuteQuery("select now() as t, version() as v");
     while (res->next()) {
         std::cout << "now() = " << res->getString("t") << std::endl;

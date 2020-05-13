@@ -18,5 +18,6 @@ int main(int argc, char *argv[]) {
     cout<<"host is "<<logger.show_host()<<std::endl;
     cout<<"Using filename "<<logger.get_filename()<<std::endl;
     logger.log("Message");
+    logger << logger.tstamp() << " " << logger.show_host() << " streamed message" << std::endl;
     return 0;
 }

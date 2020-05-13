@@ -39,7 +39,7 @@ if (LIBXML2_FOUND)
 endif (LIBXML2_FOUND)
 
 #set(BOOST_INCLUDEDIR "/usr/include")
-find_package(Boost 1.64 COMPONENTS date_time system filesystem)
+find_package(Boost 1.64 COMPONENTS date_time system filesystem program_options)
 include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(Ktrd ${Boost_LIBRARIES})
 
@@ -54,7 +54,8 @@ add_executable(Test main.cpp)
 target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
 
 add_executable(TestSQL TestSQL.cpp TestSQL.h)
-target_link_libraries(TestSQL Ktrd)
+target_link_libraries(TestSQL Ktrd ${Boost_LIBRARIES})
+
 add_executable(TestLog TestLog.cpp)
 target_link_libraries(TestLog Ktrd)
 
