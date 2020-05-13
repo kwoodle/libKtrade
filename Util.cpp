@@ -42,9 +42,9 @@ bool drk::is_workday() {
 string drk::Logger::time_now() {
     time_t tim = time(NULL);
     tm *now = localtime(&tim);
-    char buft[6];
-    sprintf(buft,"%02d:%02d:%02d", now->tm_hour, now->tm_min),now->tm_sec;
-    return string(buft);
+    stringstream sbuft;
+    sbuft << now->tm_hour << ":" << now->tm_min;
+    return sbuft.str();
 }
 
 string drk::Logger::logdir="/usr/local/lib/ktrade/logs/";
@@ -52,16 +52,14 @@ string drk::Logger::logdir="/usr/local/lib/ktrade/logs/";
 string drk::Logger::date_time_now(bool date_only) {
     time_t tim = time(NULL);
     tm *now = localtime(&tim);
-    char buf[17];
-    sprintf(buf, "%d-%02d-%02d", now->tm_year + 1900, now->tm_mon + 1, now->tm_mday);
-    if(date_only){
-        return string(buf);
+    stringstream sbuf;
+    sbuf << now->tm_year + 1900 << "-" << now->tm_mon + 1 << "-" << now->tm_mday;
+    if (date_only) {
+        return sbuf.str();
     }
-    char buft[6];
-    sprintf(buft,"%02d:%02d", now->tm_hour, now->tm_min);
-    string d(buf);
-    string t(buft);
-    return d + "::" + t;
+    stringstream sbuft;
+    sbuft << now->tm_hour << ":" << now->tm_min;
+    return sbuf.str() + "::" + sbuft.str();
 }
 
 string drk::Logger::concat_strings(initializer_list<string> items, string sep) {
