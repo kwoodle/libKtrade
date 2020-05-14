@@ -17,7 +17,7 @@ string drk::get_from_cmd(string cmd) {
     string reslt;
     const int max_buffer{512};
     char buffer[max_buffer];
-    cmd.append(" 2>&1");
+    cmd.append(" 2>/dev/null");
     FILE *stream{popen(cmd.c_str(), "r")};
     if (stream) {
         while (!feof(stream))
@@ -36,7 +36,7 @@ bool drk::is_workday() {
 //    string cmd = "/usr/bin/php -R " + drk::holiday_script;
     string cmd = "/usr/bin/php /usr/local/include/ktrade/workday_script.php";
     string res = drk::get_from_cmd(cmd);
-    return (res == "true" ? true : false);
+    return res == "true" ? false : true;
 }
 
 string drk::Logger::time_now() {
