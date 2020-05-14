@@ -8,27 +8,41 @@
 //#include <vector>
 
 using namespace drk;
+string MySqlOptions::default_filename = string(string(std::getenv("HOME")) + "/.my.cnf");
 
-KSql::KSql(const string& h, const string& u,
-        const string& p, const string& d)
-        :
-        host{h}, user{u}, pass{p},
-        con{get_driver_instance()->connect(h, u, p)},
-        stmt{con->createStatement()}
-{
-    if (!d.empty()) {
-        db = d;
-        con->setSchema(db);
-    }
+MySqlOptions::MySqlOptions(string filename) {
+    std::ifstream cfg(filename);
+    optionsDescription.add_options()
+            ("client.host", boost::program_options::value<string>())
+            ("client.user", boost::program_options::value<string>())
+            ("client.password", boost::program_options::value<string>())
+            ("client.database", boost::program_options::value<string>()->default_value(""));
+
+    boost::program_options::variables_map vm;
+    // set third parameter to true to allow unregistered options
+    // in config file.
+    store(parse_config_file(cfg, optionsDescription, true), vm);
+    notify(vm);
+
+    host = vm["client.host"].as<string>();
+    user = vm["client.user"].as<string>();
+    password = vm["client.password"].as<string>();
+    db = vm["client.database"].as<string>();
+    cfg.close();
 }
 
-void KSql::set_schema(const string& s)
-{
+
+KSql::KSql(MySqlOptions ops) :
+        con{get_driver_instance()->connect(ops.get_host(),
+                                           ops.get_user(),
+                                           ops.get_pass())},
+        stmt{con->createStatement()} {}
+
+void KSql::set_schema(const string &s) {
     con->setSchema(s);
 }
 
-void KSql::Execute(const string& s)
-{
+void KSql::Execute(const string &s) {
     stmt->execute(s);
 }
 
@@ -136,6 +150,7 @@ string KSql::DisplayTable(const string& schema, const string& table, int limit)
     outstr += "\n";
     return outstr;
 }
+
 
 string drk::mysql_replace(string cmd, string out, string db)
 {

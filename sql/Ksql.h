@@ -16,7 +16,28 @@
 //#include <mysql.h>
 #include <iostream>
 #include <vector>
+#include <boost/program_options.hpp>
+#include <fstream>
 
+using namespace std;
+
+namespace drk {
+    class MySqlOptions {
+    protected:
+        boost::program_options::options_description optionsDescription;
+        static string default_filename;
+        string host, user, password, db;
+
+    public:
+        MySqlOptions(string filename = default_filename);
+
+        string get_host() { return host; }
+
+        string get_user() { return user; }
+
+        string get_pass() { return password; }
+    };
+}
 namespace drk {
     using std::string;
     using std::vector;
@@ -27,7 +48,7 @@ namespace drk {
     using RsltSet = sql::ResultSet;
     using Cols = vector<std::pair<string, string>>;
 
-    class KSql {
+    class KSql : MySqlOptions {
 
     private:
         Con con;
@@ -37,8 +58,7 @@ namespace drk {
         string pass;
         string db;
     public:
-        explicit KSql(const string& h = "localhost", const string& u = "kwoodle",
-                const string& p = "Rancity1!", const string& d = "");
+        KSql(MySqlOptions);
 
         // execute a statement that returns no results
         void Execute(const string&);
