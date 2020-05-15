@@ -25,16 +25,13 @@ namespace drk {
     class MySqlOptions {
     protected:
         boost::program_options::options_description optionsDescription;
-        static string default_filename;
         string host, user, password, db;
 
     public:
-        MySqlOptions(string filename = default_filename);
-
+        explicit MySqlOptions(const string& filename);
+        MySqlOptions();
         string get_host() { return host; }
-
         string get_user() { return user; }
-
         string get_pass() { return password; }
     };
 }

@@ -8,9 +8,30 @@
 //#include <vector>
 
 using namespace drk;
-string MySqlOptions::default_filename = string(string(std::getenv("HOME")) + "/.my.cnf");
 
-MySqlOptions::MySqlOptions(string filename) {
+MySqlOptions::MySqlOptions() {
+    string filename = string(string(std::getenv("HOME")) + "/.my.cnf");
+    std::ifstream cfg(filename);
+    optionsDescription.add_options()
+            ("client.host", boost::program_options::value<string>())
+            ("client.user", boost::program_options::value<string>())
+            ("client.password", boost::program_options::value<string>())
+            ("client.database", boost::program_options::value<string>()->default_value(""));
+
+    boost::program_options::variables_map vm;
+    // set third parameter to true to allow unregistered options
+    // in config file.
+    store(parse_config_file(cfg, optionsDescription, true), vm);
+    notify(vm);
+
+    host = vm["client.host"].as<string>();
+    user = vm["client.user"].as<string>();
+    password = vm["client.password"].as<string>();
+    db = vm["client.database"].as<string>();
+    cfg.close();
+}
+
+MySqlOptions::MySqlOptions(const string& filename) {
     std::ifstream cfg(filename);
     optionsDescription.add_options()
             ("client.host", boost::program_options::value<string>())
