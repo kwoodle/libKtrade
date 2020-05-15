@@ -18,7 +18,6 @@ using std::string;
 
 int main(int argc, char** argv)
 {
-
     MySqlOptions opts;
     KSql kSql(opts);
     auto res = kSql.ExcuteQuery("select now() as t, version() as v");
@@ -67,7 +66,7 @@ max = D_max
 minl = l_min
 maxl = l_max
 )%%";
-    fprintf(GNU, cmd.c_str());
+    fprintf(GNU, "%s", cmd.c_str());
     string cmd2 = R"%%(set boxwidth 1
 set style fill pattern 4
 set ylabel 'counts'
@@ -83,7 +82,7 @@ plot '../gnuplot/votedata' using (column(col2)):(1) smooth frequency with boxes 
 unset multiplot
 #pause -1 "Hit return to continue"
 )%%";
-    fprintf(GNU, cmd2.c_str());
+    fprintf(GNU, "%s", cmd2.c_str());
     pclose(GNU);
     string script{cmd+cmd2};
     string scrname{"../gnuplot/script.gnu"};
