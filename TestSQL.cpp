@@ -2,9 +2,9 @@
 // Created by kwoodle on 2/15/18.
 //
 
-#include "sql/Ksql.h"
+#include <ktrade/Ksql.h>
 #include "TestSQL.h"
-#include "Util.h"
+#include <ktrade/Util.h>
 #include <ktrade/nlohmann/json.hpp>
 #include <boost/program_options.hpp>
 

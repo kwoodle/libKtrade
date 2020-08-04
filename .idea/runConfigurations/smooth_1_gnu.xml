@@ -2,11 +2,12 @@
   <configuration default="false" name="smooth.1.gnu" type="BashConfigurationType" factoryName="Bash">
     <option name="INTERPRETER_OPTIONS" value="--persist" />
     <option name="INTERPRETER_PATH" value="/usr/bin/gnuplot" />
+    <option name="PROJECT_INTERPRETER" value="true" />
     <option name="WORKING_DIRECTORY" value="$USER_HOME$/Documents/Gnuplot" />
     <option name="PARENT_ENVS" value="true" />
     <option name="SCRIPT_NAME" value="$USER_HOME$/Documents/Gnuplot/smooth.1.gnu" />
-    <option name="PARAMETERS" value="" />
-    <module name="" />
-    <method />
+    <option name="PARAMETERS" value="-persist" />
+    <RunnerSettings bashdbVersion="Automatic" bashPathMapper="Automatic" RunnerId="pro.bashsupport.shDebugRunner" />
+    <method v="2" />
   </configuration>
 </component>

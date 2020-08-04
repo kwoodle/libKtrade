@@ -40,7 +40,7 @@ endif (LIBXML2_FOUND)
 
 #set(BOOST_INCLUDEDIR "/usr/include")
 find_package(Boost 1.64 COMPONENTS date_time system filesystem program_options)
-include_directories(${Boost_INCLUDE_DIRS})
+include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
 target_link_libraries(Ktrd ${Boost_LIBRARIES})
 
 set(MYSQL_EXTRA_LIBRARIES mysqlcppconn)
@@ -50,7 +50,6 @@ include_directories(${MYSQL_INCLUDE_DIR})
 target_link_libraries(Ktrd ${MYSQL_LIBRARIES} ${MYSQL_EXTRA_LIBRARIES})
 
 add_executable(Test main.cpp)
-#include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
 target_link_libraries(Test Ktrd ${PYTHON_LIBRARIES})
 
 add_executable(TestSQL TestSQL.cpp TestSQL.h)
@@ -59,7 +58,8 @@ target_link_libraries(TestSQL Ktrd ${Boost_LIBRARIES})
 add_executable(TestLog TestLog.cpp)
 target_link_libraries(TestLog Ktrd)
 
-set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h curl/CodeMap.h sql/Ksql.h Util.h Util.cpp workday_script.php)
+set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h curl/CodeMap.h curl/TestURLs.h
+        sql/Ksql.h Util.h Util.cpp workday_script.php)
 install(TARGETS Ktrd DESTINATION lib/ktrade CONFIGURATIONS Debug Release EXPORT ktrade-targets)
 install(FILES ${SOURCE_FILES} DESTINATION include/ktrade)
 install(EXPORT ktrade-targets DESTINATION lib/ktrade/cmake)

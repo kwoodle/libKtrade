@@ -4,12 +4,12 @@
 
 #include <map>
 #include <iostream>
-#include "curl/ktcurl.h"
-#include "curl/HtmlDoc.h"
-#include "curl/CodeMap.h"
-#include "curl/parse.h"
-#include "curl/TestURLs.h"
-#include "Util.h"
+#include <ktrade/ktcurl.h>
+#include <ktrade/HtmlDoc.h>
+#include <ktrade/CodeMap.h>
+//#include <ktrade/parse.h>
+#include <ktrade/TestURLs.h>
+#include <ktrade/Util.h>
 #include <boost/filesystem.hpp>
 
 using std::string;
@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
     URLVec urls{"http://example.com", "http://examplex@.com", "https://www.iana.org"};
 //    urls.push_back("http://old.nasdaq.com/symbol/AAPL/time-sales?time=1");
     urls.push_back("http://old.nasdaq.com/symbol/AAPL");
+    urls = test_urls;
     // Get name of this application
     // to be used to create somewhat unique filename
     // in which to store data
