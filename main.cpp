@@ -10,6 +10,7 @@
 //#include <ktrade/parse.h>
 #include <ktrade/TestURLs.h>
 #include <ktrade/Util.h>
+#include <ktrade/Dialogue.h>
 #include <boost/filesystem.hpp>
 
 using std::string;
@@ -22,8 +23,8 @@ using namespace drk;
 int main(int argc, char *argv[]) {
     URLVec urls{"http://example.com", "http://examplex@.com", "https://www.iana.org"};
 //    urls.push_back("http://old.nasdaq.com/symbol/AAPL/time-sales?time=1");
-    urls.push_back("http://old.nasdaq.com/symbol/AAPL");
-    urls = test_urls;
+//    urls.push_back("http://old.nasdaq.com/symbol/AAPL");
+//    urls = test_urls;
     // Get name of this application
     // to be used to create somewhat unique filename
     // in which to store data
@@ -60,6 +61,7 @@ int main(int argc, char *argv[]) {
             }
         }
     }
+    // Test Slurp
     std::string string1{"../gnuplot/gnuplot_test.data"};
     ifstream ifstream1(string1);
     if (!ifstream1) {
@@ -68,9 +70,41 @@ int main(int argc, char *argv[]) {
     string test_slurp{drk::slurp(ifstream1)};
     cout << "Slurped string from " << string1 << " has length " << test_slurp.length() << "\n";
 
+    //Test is_workday
     bool tst = drk::is_workday();
     string tst_out = tst ? " is " : " is not ";
     string t_out = "\nToday" + tst_out + "a workday\n";
     cout << t_out;
+
+
+    //test Zenity
+    drk::Dialogue dialogue;
+    cout << "Testing FileDialogue with no --filename" << std::endl;
+    std::string zenfile{dialogue.file_dialogue()};
+//    std::string zenfile{drk::FileDialogue()};
+    if (zenfile.empty())
+        std::cout << "File Dialogue Cancelled\n";
+    else
+        std::cout << "zenity file dialogue returned " << zenfile << std::endl;
+
+/*
+    //test 2 Zenity
+    string strt("/home");
+    string zenfile2 = drk::FileDialogue(strt);
+    if(zenfile2.empty())
+        std::cout<<"File Dialogue Cancelled";
+    else
+        std::cout<<"zenity file dialogue returned "<<zenfile2<<std::endl;*/
+
+    //test 3 Zenity
+    cout << "Testing FileDialogue with --filename=/path/file" << std::endl;
+    string strt2 = "/home/kwoodle/create-users";
+//    string zenfile3 = drk::FileDialogue(strt2);
+    string zenfile3 = dialogue.file_dialogue(strt2);
+    if (zenfile3.empty())
+        std::cout << "File Dialogue Cancelled";
+    else
+        std::cout << "zenity file dialogue returned " << zenfile3 << std::endl;
+
     return 0;
 }

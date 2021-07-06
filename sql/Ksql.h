@@ -43,6 +43,7 @@ namespace drk {
     using PrepStmtPtr = std::shared_ptr<sql::PreparedStatement>;
     using StmtPtr = std::shared_ptr<sql::Statement>;
     using RsltSet = sql::ResultSet;
+    using ColVal = std::pair<string, string>;
     using Cols = vector<std::pair<string, string>>;
 
     class KSql : MySqlOptions {
@@ -61,7 +62,7 @@ namespace drk {
         void Execute(const string&);
 
         // execute a query
-        RsltSet* ExcuteQuery(const string& s);
+        RsltSet *ExecuteQuery(const string &s);
 
         void set_schema(const string& s);
         Cols get_cols(const string& table_schema, const string& table_name);

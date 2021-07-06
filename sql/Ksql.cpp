@@ -31,7 +31,7 @@ MySqlOptions::MySqlOptions() {
     cfg.close();
 }
 
-MySqlOptions::MySqlOptions(const string& filename) {
+MySqlOptions::MySqlOptions(const string &filename) {
     std::ifstream cfg(filename);
     optionsDescription.add_options()
             ("client.host", boost::program_options::value<string>())
@@ -67,8 +67,7 @@ void KSql::Execute(const string &s) {
     stmt->execute(s);
 }
 
-RsltSet* KSql::ExcuteQuery(const string& s)
-{
+RsltSet *KSql::ExecuteQuery(const string &s) {
     return stmt->executeQuery(s);
 }
 
@@ -77,9 +76,7 @@ RsltSet* KSql::ExcuteQuery(const string& s)
     where table_schema = '<TABLE_SCHEMA>'
     and table_name = '<TABLE_NAME>')%%"};
 */
-Cols KSql::get_cols(const string& table_schema, const string& table_name)
-{
-    Cols out;
+Cols KSql::get_cols(const string &table_schema, const string &table_name) {
 
     // cols_str is a template. Use regex_replace to fill in schema and table
     string s1{cols_str};
@@ -88,11 +85,15 @@ Cols KSql::get_cols(const string& table_schema, const string& table_name)
 
     string s2{std::regex_replace(s1, pat1, table_schema)};
     string sql{std::regex_replace(s2, pat2, table_name)};
-    auto res{ExcuteQuery(sql)};
+    auto res{ExecuteQuery(sql)};
+    size_t sz{res->rowsCount()};
+    Cols out(sz);
     while (res->next()) {
+        int ord{res->getInt("ordinal_position")};
         string cn{res->getString("column_name")};
         string ct{res->getString("column_type")};
-        out.push_back(std::make_pair(cn, ct));
+        out.at(ord - 1) = std::make_pair(cn, ct);
+//        out.push_back(std::make_pair(cn, ct));
     }
     delete res;
     return out;
@@ -100,8 +101,7 @@ Cols KSql::get_cols(const string& table_schema, const string& table_name)
 
 // Do sql select on all columns in schema.table; limit output to limit
 //
-string KSql::DisplayTable(const string& schema, const string& table, int limit)
-{
+string KSql::DisplayTable(const string &schema, const string &table, int limit) {
     Cols cols{get_cols(schema, table)};
 
     // vector of column_names to serve as first line of output (header for table)
@@ -115,16 +115,16 @@ string KSql::DisplayTable(const string& schema, const string& table, int limit)
         q += col += ", ";
     }
     // erase last comma and space
-    q.erase(q.length()-2);
+    q.erase(q.length() - 2);
 
     // append limit
-    q += " from "+schema+"."+table+" limit "+std::to_string(limit);
+    q += " from " + schema + "." + table + " limit " + std::to_string(limit);
 
     // outstring will be part of output documenting what query was executed
     string outstr = q += "\n";
 
     // execute the query; result in res
-    auto res{ExcuteQuery(q)};
+    auto res{ExecuteQuery(q)};
     auto is{cols.size()};
 
     // rows will be output
@@ -159,11 +159,11 @@ string KSql::DisplayTable(const string& schema, const string& table, int limit)
     }
     outstr += "\n";
     for (auto r:rows) {
-        for (auto i = 0; i<is; ++i) {
+        for (auto i = 0; i < is; ++i) {
             auto o = r[i];
 
             // pad fields to align column data to the right
-            o.insert(o.begin(), mls[i]+4-o.length(), ' ');
+            o.insert(o.begin(), mls[i] + 4 - o.length(), ' ');
             outstr += o;
         }
         outstr += "\n";
@@ -173,8 +173,7 @@ string KSql::DisplayTable(const string& schema, const string& table, int limit)
 }
 
 
-string drk::mysql_replace(string cmd, string out, string db)
-{
+string drk::mysql_replace(string cmd, string out, string db) {
     string s1{mysql_tmplt};
     std::regex pat1{"<MYSQL_CMD>"};
     std::regex pat2{"<MYSQL_DB>"};

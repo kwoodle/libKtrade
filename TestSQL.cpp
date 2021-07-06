@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 {
     MySqlOptions opts;
     KSql kSql(opts);
-    auto res = kSql.ExcuteQuery("select now() as t, version() as v");
+    auto res = kSql.ExecuteQuery("select now() as t, version() as v");
     while (res->next()) {
         std::cout << "now() = " << res->getString("t") << std::endl;
         std::cout << "version() = " << res->getString("v") << std::endl;
