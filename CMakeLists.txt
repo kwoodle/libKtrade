@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.9)
 project(libKtrade)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 # For FindMySQL
-list(APPEND CMAKE_MODULE_PATH /home/kwoodle/CLionProjects/cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 message(STATUS "CMAKE_MODULE_PATH = " ${CMAKE_MODULE_PATH})
 if (NOT CMAKE_DEBUG_POSTFIX)
     set(CMAKE_DEBUG_POSTFIX _d)
@@ -14,7 +14,7 @@ set(COMPILE_OPTIONS -Wno-deprecated-declarations -fpermissive)
 add_compile_options(${COMPILE_OPTIONS})
 
 set(LIB_SOURCE_FILES curl/ktcurl.cpp curl/ktcurl.h curl/HtmlDoc.cpp curl/HtmlDoc.h
-        curl/CodeMap.h curl/TestURLs.h sql/Ksql.cpp sql/Ksql.h Util.cpp Util.h)
+      curl/CodeMap.h curl/TestURLs.h sql/Ksql.cpp sql/Ksql.h Util.cpp Util.h Dialogue.cpp Dialogue.h)
 add_library(Ktrd SHARED ${LIB_SOURCE_FILES} curl/parse.cpp curl/parse.h Util.cpp Util.h
         workday_script.php)
 
@@ -41,7 +41,7 @@ endif (LIBXML2_FOUND)
 #set(BOOST_INCLUDEDIR "/usr/include")
 find_package(Boost 1.64 COMPONENTS date_time system filesystem program_options)
 include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
-target_link_libraries(Ktrd ${Boost_LIBRARIES})
+target_link_libraries(Ktrd Boost::date_time Boost::system Boost::filesystem Boost::program_options)
 
 set(MYSQL_EXTRA_LIBRARIES mysqlcppconn)
 #set(MYSQL_EXTRA_LIBRARIES mysqlcppconn2)
@@ -59,7 +59,7 @@ add_executable(TestLog TestLog.cpp)
 target_link_libraries(TestLog Ktrd)
 
 set(SOURCE_FILES curl/ktcurl.h curl/HtmlDoc.h curl/CodeMap.h curl/TestURLs.h
-        sql/Ksql.h Util.h Util.cpp workday_script.php)
+      sql/Ksql.h Util.h Dialogue.h workday_script.php)
 install(TARGETS Ktrd DESTINATION lib/ktrade CONFIGURATIONS Debug Release EXPORT ktrade-targets)
 install(FILES ${SOURCE_FILES} DESTINATION include/ktrade)
 install(EXPORT ktrade-targets DESTINATION lib/ktrade/cmake)
