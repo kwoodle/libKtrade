@@ -26,8 +26,7 @@ int main() {
             ("mysql.service", po::value<string>())
             ("mysql.user", po::value<string>())
             ("mysql.password", po::value<string>())
-            ("mysql.database", po::value<string>())
-            ("mysql.table", po::value<string>());
+            ("mysql.database", po::value<string>());
 
     po::variables_map vm;
 
@@ -40,7 +39,8 @@ int main() {
     user = vm["mysql.user"].as<string>();
     pass = vm["mysql.password"].as<string>();
     database = vm["mysql.database"].as<string>();
-    table = vm["mysql.table"].as<string>();
     cfg.close();
+
+    cout<<"service = "<<service<<"\t\t user = "<<user<<"\t\t database = "<<database<<std::endl;
     return 0;
 }
