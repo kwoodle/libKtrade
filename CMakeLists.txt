@@ -40,7 +40,7 @@ endif (LIBXML2_FOUND)
 
 #set(BOOST_INCLUDEDIR "/usr/include")
 find_package(Boost 1.64 COMPONENTS date_time system filesystem program_options)
-include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
+# include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
 target_link_libraries(Ktrd Boost::date_time Boost::system Boost::filesystem Boost::program_options)
 
 set(MYSQL_EXTRA_LIBRARIES mysqlcppconn)

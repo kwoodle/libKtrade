@@ -4,13 +4,13 @@
 
 #include <map>
 #include <iostream>
-#include <ktrade/ktcurl.h>
-#include <ktrade/HtmlDoc.h>
-#include <ktrade/CodeMap.h>
+#include "curl/ktcurl.h"
+#include "curl/HtmlDoc.h"
+#include "curl/CodeMap.h"
 //#include <ktrade/parse.h>
-#include <ktrade/TestURLs.h>
-#include <ktrade/Util.h>
-#include <ktrade/Dialogue.h>
+#include "curl/TestURLs.h"
+#include "Util.h"
+#include "Dialogue.h"
 #include <boost/filesystem.hpp>
 
 using std::string;

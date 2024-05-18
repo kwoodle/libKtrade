@@ -8,7 +8,7 @@ using std::get;
 
 using namespace std::chrono;
 using namespace drk;
-
+//** requires defining /var/tmp/ktrade !!
 string EzCurl::froot{"/var/tmp/ktrade/"};
 string EzCurl::suff{".html"};
 const string Multi::froot{"/var/tmp/ktrade/"};
