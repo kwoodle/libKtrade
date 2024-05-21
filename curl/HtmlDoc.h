@@ -5,8 +5,8 @@
 #ifndef LIBKTRADE_HTML_H
 #define LIBKTRADE_HTML_H
 
-#include <libxml/HTMLparser.h>
-#include <libxml/xpath.h>
+#include <libxml2/libxml/HTMLparser.h>
+#include <libxml2/libxml/xpath.h>
 #include <string>
 #include "ktcurl.h"
 

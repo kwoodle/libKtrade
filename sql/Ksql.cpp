@@ -130,7 +130,7 @@ string KSql::DisplayTable(const string &schema, const string &table, int limit) 
     // rows will be output
     vector<vector<string>> rows;
 
-    // vectory of maximum field lengths
+    // vector of maximum field lengths
     vector<u_long> mls(is);
     while (res->next()) {
         // keep track of individual fields so we can find maximum field length
