@@ -13,7 +13,7 @@ MySqlOptions::MySqlOptions() {
     string filename = string(string(std::getenv("HOME")) + "/.my.cnf");
     std::ifstream cfg(filename);
     optionsDescription.add_options()
-            ("client.host", boost::program_options::value<string>())
+            ("client.host", boost::program_options::value<string>()->default_value("localhost"))
             ("client.user", boost::program_options::value<string>())
             ("client.password", boost::program_options::value<string>())
             ("client.database", boost::program_options::value<string>()->default_value(""));
