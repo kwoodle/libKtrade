@@ -13,7 +13,7 @@ MySqlOptions::MySqlOptions() {
     string filename = string(string(std::getenv("HOME")) + "/.my.cnf");
     std::ifstream cfg(filename);
     optionsDescription.add_options()
-            ("client.host", boost::program_options::value<string>())
+            ("client.host", boost::program_options::value<string>()->default_value("localhost"))
             ("client.user", boost::program_options::value<string>())
             ("client.password", boost::program_options::value<string>())
             ("client.database", boost::program_options::value<string>()->default_value(""));
@@ -130,7 +130,7 @@ string KSql::DisplayTable(const string &schema, const string &table, int limit) 
     // rows will be output
     vector<vector<string>> rows;
 
-    // vectory of maximum field lengths
+    // vector of maximum field lengths
     vector<u_long> mls(is);
     while (res->next()) {
         // keep track of individual fields so we can find maximum field length
