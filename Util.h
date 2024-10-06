@@ -14,6 +14,7 @@
 #include <sstream>
 #include <initializer_list>
 #include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 
 namespace boofs = boost::filesystem;        // to get name of executable
 

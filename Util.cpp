@@ -29,7 +29,10 @@ string drk::get_from_cmd(string cmd) {
 }
 
 string drk::slurp(ifstream &in) {
-    return dynamic_cast<stringstream const &>(stringstream() << in.rdbuf()).str();
+    std::stringstream sstr;
+    sstr << in.rdbuf();
+    in.close();
+    return sstr.str();
 }
 
 
