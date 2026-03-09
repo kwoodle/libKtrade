@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.9)
+#MariaDB upgrade required installation of libmariadb-dev-compat
+#This provides MariaDB Connector/C
+
+cmake_minimum_required(VERSION 3.10)
 project(libKtrade)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -38,9 +41,9 @@ if (LIBXML2_FOUND)
     message(STATUS "LibXml2_include_dir " ${LIBXML2_INCLUDE_DIR})
 endif (LIBXML2_FOUND)
 
-find_package(Boost 1.64 COMPONENTS date_time system filesystem program_options)
+find_package(Boost 1.64 CONFIG COMPONENTS date_time system filesystem program_options)
 #include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
-target_link_libraries(Ktrd INTERFACE Boost::date_time Boost::system Boost::filesystem Boost::program_options)
+target_link_libraries(Ktrd PUBLIC Boost::date_time Boost::filesystem Boost::program_options)
 
 set(MYSQL_EXTRA_LIBRARIES mysqlcppconn)
 

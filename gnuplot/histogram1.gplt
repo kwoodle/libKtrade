@@ -2,7 +2,7 @@
 #
 # Plot a historgram from a one dimensional data array
 # compare: http://stackoverflow.com/questions/2471884/histogram-using-gnuplot
-#
+# https://gnuplotting.org/calculating-histograms/
 # AUTHOR: Hagen Wierstorf
 # gnuplot 4.6 patchlevel 0
 
