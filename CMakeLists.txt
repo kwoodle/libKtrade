@@ -41,7 +41,7 @@ if (LIBXML2_FOUND)
     message(STATUS "LibXml2_include_dir " ${LIBXML2_INCLUDE_DIR})
 endif (LIBXML2_FOUND)
 
-find_package(Boost 1.64 CONFIG COMPONENTS date_time system filesystem program_options)
+find_package(Boost CONFIG COMPONENTS date_time system filesystem program_options)
 #include(/usr/local/lib/ktrade/cmake/ktrade-targets.cmake)
 target_link_libraries(Ktrd PUBLIC Boost::date_time Boost::filesystem Boost::program_options)
 
